@@ -14,7 +14,6 @@
 
 import distributed
 import subprocess
-import warnings
 
 from airflow import configuration
 from airflow.executors.base_executor import BaseExecutor
@@ -38,15 +37,14 @@ class DaskExecutor(BaseExecutor):
         self.futures = {}
 
     def execute_async(self, key, command, queue=None):
+        queue_resources = None
         if queue is not None:
-            warnings.warn(
-                'DaskExecutor does not support queues. All tasks will be run in the same cluster'
-            )
+            queue_resources = {'airflow-queue-{queue}'.format(queue=queue): 1}
 
         def airflow_run():
             return subprocess.check_call(command, shell=True)
 
-        future = self.client.submit(airflow_run, pure=False)
+        future = self.client.submit(airflow_run, pure=False, resources=queue_resources)
         self.futures[future] = key
 
     def _process_future(self, future):

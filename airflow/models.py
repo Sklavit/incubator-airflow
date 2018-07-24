@@ -2049,8 +2049,8 @@ class BaseOperator(LoggingMixin):
         is forced to True wherever wait_for_downstream is used.
     :type wait_for_downstream: bool
     :param queue: which queue to target when running this job. Not
-        all executors implement queue management, the CeleryExecutor
-        does support targeting specific queues.
+        all executors implement queue management, the CeleryExecutor and
+        the DaskExecutor do support targeting specific queues.
     :type queue: str
     :param dag: a reference to the dag the task is attached to (if any)
     :type dag: DAG
@@ -2135,7 +2135,7 @@ class BaseOperator(LoggingMixin):
             default_args=None,
             adhoc=False,
             priority_weight=1,
-            queue=configuration.get('celery', 'default_queue'),
+            queue=configuration.get('celery', 'default_queue'), # TODO add Dask support here
             pool=None,
             sla=None,
             execution_timeout=None,
