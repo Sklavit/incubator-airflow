@@ -13,13 +13,14 @@
 # limitations under the License.
 
 from airflow import configuration
+#from airflow.jobs import LocalTaskJob -- Circular dependency with `jobs`! TODO fix Circular dependency
 from airflow.task_runner.bash_task_runner import BashTaskRunner
 from airflow.exceptions import AirflowException
 
 _TASK_RUNNER = configuration.get('core', 'TASK_RUNNER')
 
 
-def get_task_runner(local_task_job):
+def get_task_runner(local_task_job):  # local_task_job: LocalTaskJob
     """
     Get the task runner that can be used to run the given job.
 

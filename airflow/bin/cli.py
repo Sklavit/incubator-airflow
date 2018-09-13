@@ -31,8 +31,12 @@ from dateutil.parser import parse as parsedate
 import json
 from tabulate import tabulate
 
-import daemon
-from daemon.pidfile import TimeoutPIDLockFile
+import platform
+
+if platform.system() != 'Windows':
+    import daemon
+    from daemon.pidfile import TimeoutPIDLockFile
+
 import signal
 import sys
 import threading

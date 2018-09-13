@@ -27,7 +27,12 @@ LOG_FORMAT = conf.get('core', 'log_format')
 BASE_LOG_FOLDER = conf.get('core', 'BASE_LOG_FOLDER')
 PROCESSOR_LOG_FOLDER = conf.get('scheduler', 'child_process_log_directory')
 
-FILENAME_TEMPLATE = '{{ ti.dag_id }}/{{ ti.task_id }}/{{ ts }}/{{ try_number }}.log'
+import platform
+if platform.system() == 'Windows':
+    FILENAME_TEMPLATE = '{{ ti.dag_id }}/{{ ti.task_id }}/{{ ts_nodash }}/{{ try_number }}.log'
+else:
+    FILENAME_TEMPLATE = '{{ ti.dag_id }}/{{ ti.task_id }}/{{ ts }}/{{ try_number }}.log'
+
 PROCESSOR_FILENAME_TEMPLATE = '{{ filename }}.log'
 
 DEFAULT_LOGGING_CONFIG = {
